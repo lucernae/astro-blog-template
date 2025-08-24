@@ -1,0 +1,27 @@
+---
+title: Example of Post Series
+description: How to show off your customized posts entries as a post
+date: 2025-08-22T00:00:00
+category:
+  name: blogs
+<!-- layout: blog-post -->
+---
+
+Sometimes you create several articles that can be grouped as a Post Series. You handpicked/curated those posts into one category,
+but doesn't want to show it as categories.
+
+This is like making index page, but you curated the list by yourself
+
+To do this, in the MDX page, you fetch the post first and do filter/ordering to create the collections.
+Then pass it to the Astro component to render the pages
+
+import { getPosts, filterPostsByCategory, getPostByTag } from '@/utils'
+import PostListCard from '@/components/PostListCard'
+
+<PostListCard
+	displayAsRows={true}
+	posts={(await getPosts()).filter(function (post) {
+		debugger
+		return post.data.category.name === 'blogs'
+	})}
+/>

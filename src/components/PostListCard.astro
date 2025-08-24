@@ -1,0 +1,85 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { getPosts, filterPostsByCategory, getPostByTag } from '@/utils'
+import PostCard from '@/components/PostCard'
+
+interface Props {
+	posts?: CollectionEntry<any>
+	category?: string
+	tag?: string
+	limit?: number
+	sortBy?: 'date' | 'title'
+	sortOrder?: 'asc' | 'desc'
+	displayAsRows?: boolean
+}
+
+const {
+	category,
+	tag,
+	limit = 10,
+	sortBy = 'date',
+	sortOrder = 'desc',
+	displayAsRows = false
+} = Astro.props
+
+// Fetch posts based on filters
+let posts = Astro.props.posts
+debugger
+if (posts) {
+	// don't filter
+} else if (category) {
+	posts = await filterPostsByCategory(category)
+} else if (tag) {
+	posts = await getPostByTag(tag)
+} else {
+	posts = await getPosts()
+}
+
+// Apply limit
+posts = posts.slice(0, limit)
+
+// Sort posts
+if (sortBy === 'date') {
+	posts = posts.sort((a, b) => {
+		const dateA = a.data.pubDate.valueOf()
+		const dateB = b.data.pubDate.valueOf()
+		return sortOrder === 'asc' ? dateA - dateB : dateB - dateA
+	})
+} else if (sortBy === 'title') {
+	posts = posts.sort((a, b) => {
+		const titleA = a.data.title.toLowerCase()
+		const titleB = b.data.title.toLowerCase()
+		return sortOrder === 'asc' ? titleA.localeCompare(titleB) : titleB.localeCompare(titleA)
+	})
+}
+---
+
+<div class='table-of-contents'>
+	<div
+		class={displayAsRows ? 'grid gap-6' : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'}
+	>
+		{
+			posts.map(async (post) => {
+				const { remarkPluginFrontmatter } = await post.render()
+
+				return (
+					<PostCard
+						id={post.id}
+						data={post.data}
+						slug={post.slug}
+						readTime={remarkPluginFrontmatter.minutesRead}
+						displayAsRows={displayAsRows}
+					/>
+				)
+			})
+		}
+	</div>
+
+	{
+		posts.length === 0 && (
+			<div class='text-center py-10'>
+				<p class='text-gray-600 dark:text-gray-400'>No posts found matching the criteria.</p>
+			</div>
+		)
+	}
+</div>
