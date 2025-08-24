@@ -49,6 +49,8 @@
 		"astro": "^4.16.4",
 		"astro-embed": "^0.7.4",
 		"astro-font": "^0.0.72",
+		"katex": "^0.16.11",
+		"mathjs": "^13.2.0",
 		"nanostores": "^0.11.3",
 		"plotly.js": "^2.35.2",
 		"react-loadable": "^5.5.0",

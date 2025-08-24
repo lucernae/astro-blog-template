@@ -10,12 +10,11 @@ export const getAllCollection = async () => {
 		await getCollection('blog')
 	]
 	return allPosts.flat().filter((c) => {
-		return c.data.title !== undefined
+		return c.data.title !== undefined && c.data.post
 	})
 }
 
 export const getCategories = async () => {
-	// const posts = await getCollection('blog')
 	const posts = await getAllCollection()
 	const categories = new Set(posts.map((post) => getCategoryName(post.data.category)))
 	return Array.from(categories)
@@ -38,7 +37,6 @@ export const getCategoryName = (cat: string | any) => {
 }
 
 export const getPosts = async (max?: number) => {
-	// return (await getCollection('soft-dev'))
 	return (await getAllCollection())
 		.filter((post) => !post.data.draft && !post.data.index)
 		.map((post) => {
@@ -56,8 +54,6 @@ export const getPosts = async (max?: number) => {
 }
 
 export const getTags = async () => {
-	// const posts = await getCollection('blog')
-	// const posts = await getAllCollection()
 	const posts = await getPosts()
 	const tags = new Set()
 	posts.forEach((post) => {

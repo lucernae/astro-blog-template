@@ -54,5 +54,8 @@ export default defineConfig({
 		}),
 		sitemap(),
 		tailwind()
-	]
+	],
+	experimental: {
+		contentLayer: true,
+	},
 })

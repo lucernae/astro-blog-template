@@ -17,7 +17,7 @@ The concept is similar like python package or go package
 Simply import it with the extension `.mdx`, just like you would inside MDX content.
 
 ```mdx
-import Component from './component.mdx'
+import Component from './components/component.mdx'
 
 <Component />
 ```
@@ -26,11 +26,23 @@ Will output the content of the component
 
 <blockquote>
 
-import Component from './component.mdx'
+import Component from './components/component.mdx'
 
 <Component />
 
 </blockquote>
+
+## Importing React component
+
+import { BaseRunnableWidget, BaseRunnableWidgetWrapped } from './widget.jsx'
+
+```jsx
+<BaseRunnableWidget client:only='react'>
+	<div aslabel='input'>Input $a$</div>
+</BaseRunnableWidget>
+```
+
+<BaseRunnableWidgetWrapped client:only='react' />
 
 ## Importing images in the same directory
 
